@@ -1,0 +1,177 @@
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+
+  #social .button-icon {
+    filter: invert(1) brightness(2);
+  }
+}
+
+#root {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  border-inline: 1px solid var(--border);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+
+/* Carta e proiezione nello stesso slot: nessun asset o percorso aggiuntivo. */
+.terrain-horizontal-card.is-player-card .terrain-card-inner {
+  /* La carta equipaggiata dal giocatore e' visibile anche prima dell'attivazione.
+     Il dorso della carta nemica resta nascosto fino al trigger. */
+  transform: rotateY(180deg) !important;
+}
+.terrain-horizontal-card {
+  isolation: isolate;
+}
+.terrain-slot-hologram {
+  --terrain-holo-color: #38bdf8;
+  position: absolute;
+  pointer-events: none;
+  bottom: calc(100% - 2px);
+  left: 50%;
+  width: 40px;
+  height: 42px;
+  transform: translateX(-50%);
+  z-index: 6;
+  overflow: visible;
+  filter: drop-shadow(0 0 7px var(--terrain-holo-color));
+}
+.terrain-holo-projection {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%) perspective(140px) rotateX(-8deg);
+  width: 32px;
+  height: 42px;
+  object-fit: fill;
+  opacity: 0.84;
+  mix-blend-mode: screen;
+  filter: saturate(0.5) brightness(1.9) contrast(1.2) drop-shadow(0 0 5px var(--terrain-holo-color));
+  animation: terrainHologramFloat 3.1s ease-in-out infinite alternate;
+}
+.terrain-holo-light-beam {
+  position: absolute;
+  width: 31px;
+  height: 51px;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(to top, color-mix(in srgb, var(--terrain-holo-color) 27%, transparent), transparent 85%);
+  clip-path: polygon(30% 100%,70% 100%,100% 0,0 0);
+  opacity: 0.7;
+}
+.terrain-holo-emitter {
+  position: absolute;
+  width: 28px;
+  height: 5px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: var(--terrain-holo-color);
+  box-shadow: 0 0 8px 2px var(--terrain-holo-color);
+  opacity: 0.9;
+}
+@keyframes terrainHologramFloat {
+  from { transform: translateX(-50%) translateY(0) perspective(140px) rotateX(-8deg); opacity: 0.70; }
+  to { transform: translateX(-50%) translateY(-3px) perspective(140px) rotateX(-8deg); opacity: 0.94; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .terrain-holo-projection { animation: none; }
+}
